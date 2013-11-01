@@ -1,5 +1,4 @@
 
-import storage
 import StringIO
 import sys
 import test_local_storage
@@ -24,10 +23,11 @@ class TestS3Storage(test_local_storage.TestLocalStorage):
     '''Extra tests for coverage completion.'''
 
     def setUp(self):
-        self._storage = storage.load('s3')
+        self.set_config('s3')
 
     def tearDown(self):
-        self._storage._boto_bucket.delete()
+        if hasattr(self._storage, '_boto_bucket'):
+            self._storage._boto_bucket.delete()
 
     def test_list_bucket(self):
         # Add a couple of bucket keys
